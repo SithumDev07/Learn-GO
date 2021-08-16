@@ -33,8 +33,42 @@
     totalLength, _ := lenAndUpper("golang") -> uppercase (ignore)
 
 #### we can pass many values in to functions
-func repeatMe(words ...string) {
-	fmt.Println(words)
-} 
+    func repeatMe(words ...string) {
+        fmt.Println(words)
+    } 
 
-repeatMe("Powered", "Golang", "Learning", "Hustling") -> will return as a literal array
+    repeatMe("Powered", "Golang", "Learning", "Hustling") -> will return as a literal array
+
+#### naked return
+    we don't have to return value explicitly, 
+    func lenAndUpper(name string) (length int, uppercase string) {
+        length = len(name)
+        uppercase = strings.ToUpper(name)
+        return
+    }
+
+#### we can execute something after the function executed
+
+    func lenAndUpper(name string) (length int, uppercase string) {
+        defer fmt.Println("I' Done") -> this will execute after the function executed
+        length = len(name)
+        uppercase = strings.ToUpper(name)
+        return
+    }
+
+## Loops
+    only have for loop in GO
+    func superAdd(numbers ...int) int {
+        for index, number := range numbers { -> index will give the index and number will give the value
+            fmt.Println(index, number)
+        }
+        return 1
+    }
+
+##### Other way doing
+    func superAdd(numbers ...int) int {
+        for i := 0; i < len(numbers); i++ {
+            fmt.Println(numbers[i])
+        }
+        return 1
+    }
