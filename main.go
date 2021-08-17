@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strings"
+
+	"github.com/SithumDev07/LearnGO/accounts"
 )
 
 // import (
@@ -46,8 +48,13 @@ func canIDrink(age int) bool {
 	return false
 }
 
+type person struct {
+	name    string
+	age     int
+	favFood []string
+}
+
 func main() {
-	names := []string{"GO", "Python"}
-	names = append(names, "JavaScript")
-	fmt.Println(names)
+	account := accounts.NewAccount("Sithum")
+	fmt.Println(account)
 }

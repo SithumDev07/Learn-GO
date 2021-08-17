@@ -114,3 +114,81 @@ Arrays in go without the length, append will return a new value rather than modi
     names := []string{"GO", "Python"}
 	names = append(names, "JavaScript")
 	fmt.Println(names)
+
+### Map Data Structures
+
+                //Key  	//Value
+	Languages := map[string]string{"name": "GoLang", "age": "6"}
+	fmt.Println(Languages)
+
+Iterating the array
+
+    for key, value := range Languages {
+		fmt.Println(key, value)
+	}
+
+### Structs
+
+    type person struct {
+        name    string
+        age     int
+        favFood []string
+    }
+
+    func main() {
+        favFood := []string{"Peanut Butter", "Kottu", "Ice Cream"}
+        Sithum := person{"Sithum", 21, favFood}
+        fmt.Println(Sithum)
+        fmt.Println(Sithum.favFood)
+    }
+
+Another Way
+
+    Sithum := person{name: "Sithum", age: 21, favFood: favFood}
+	fmt.Println(Sithum)
+
+##### Go doesn't have classes and objects or constructors (We have to define ourselves)
+
+### Structs Exporting
+if Types are lowercase, it means they are private
+
+private->
+
+    //Account struct
+    type Account struct {
+        owner   string
+        balance int
+    }
+
+public->
+
+    //Account struct
+    type Account struct {
+        Owner   string
+        Balance int
+    }
+
+### Functions that makes constructors
+
+    package accounts
+
+    // Account struct
+    type Account struct {
+        owner   string
+        balance int
+    }
+
+    //NewAccount Creates Account
+    func NewAccount(owner string) *Account {
+        account := Account{owner: owner, balance: 0}
+        return &account
+    }
+
+then->
+
+    import (
+	    "github.com/SithumDev07/LearnGO/accounts"
+    )
+
+    account := accounts.NewAccount("Sithum")
+	fmt.Println(account)
