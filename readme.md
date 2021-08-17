@@ -192,3 +192,17 @@ then->
 
     account := accounts.NewAccount("Sithum")
 	fmt.Println(account)
+
+### Methods (in GO Recievers)
+
+When we actually change the value we use have to exactly point to the value rather than making a copy
+
+    // Deposti x Amount in account
+    func (a *Account) Deposit(amount int) {
+        a.balance += amount
+    }
+
+    // Balance of account
+    func (a Account) Balance() int {
+        return a.balance
+    }

@@ -56,5 +56,6 @@ type person struct {
 
 func main() {
 	account := accounts.NewAccount("Sithum")
-	fmt.Println(account)
+	account.Deposit(79500)
+	fmt.Println(account.Balance())
 }
