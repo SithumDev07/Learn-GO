@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/SithumDev07/LearnGO/accounts"
@@ -58,10 +57,9 @@ type person struct {
 func main() {
 	account := accounts.NewAccount("Sithum")
 	account.Deposit(79500)
-	fmt.Println(account.Balance())
-	err := account.Withdraw(90000)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println(account.Balance())
+	// err := account.Withdraw(90000)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	fmt.Println(account)
 }

@@ -233,3 +233,18 @@ in reciever
     if a.balance < amount {
 		return errNoMoney
 	}
+
+### Go Internal Methods
+
+    fmt.Println(account) will look like &{Sithum 79500} 
+
+there is reciever call String() and we can use it to change the default behavior
+
+    func (a Account) String() string {
+	    return fmt.Sprint(a.Owner(), "'s account.\nHas: ", a.Balance())
+    }
+
+This will give an output like,
+
+    Sithum's account.
+    Has: 79500
