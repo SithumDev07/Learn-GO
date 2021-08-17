@@ -206,3 +206,30 @@ When we actually change the value we use have to exactly point to the value rath
     func (a Account) Balance() int {
         return a.balance
     }
+
+### Error Handling (No Try Catch in GO) -> we have to handle manually
+
+    func (a *Account) Withdraw(amount int) error {
+        if a.balance < amount {
+            return errors.New("Account Balance is insufficient")
+        }
+        a.balance -= amount
+        return nil
+    }
+
+Handling
+
+    err := account.Withdraw(90000)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+Premake erros
+
+    var errNoMoney = errors.New("Bank Balance is insufficient")
+
+in reciever
+
+    if a.balance < amount {
+		return errNoMoney
+	}

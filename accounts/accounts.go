@@ -1,10 +1,14 @@
 package accounts
 
+import "errors"
+
 // Account struct
 type Account struct {
 	owner   string
 	balance int
 }
+
+var errNoMoney = errors.New("Bank Balance is insufficient")
 
 //NewAccount Creates Account
 func NewAccount(owner string) *Account {
@@ -20,4 +24,12 @@ func (a *Account) Deposit(amount int) {
 // Balance of account
 func (a Account) Balance() int {
 	return a.balance
+}
+
+func (a *Account) Withdraw(amount int) error {
+	if a.balance < amount {
+		return errNoMoney
+	}
+	a.balance -= amount
+	return nil
 }
