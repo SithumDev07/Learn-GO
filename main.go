@@ -47,16 +47,7 @@ func canIDrink(age int) bool {
 }
 
 func main() {
-	// fmt.Println(multiply(45, 10))
-	// something.SayHello()
-	// totalLength, _ := lenAndUpper("Sithum")
-	// fmt.Println(totalLength)
-
-	// repeatMe("Sithum", "Golang", "Learning", "Hustling")
-
-	// length, upper := lenAndUpper("Sithum")
-	// fmt.Println(length, upper)
-
-	// result := superAdd(45, 885, 125, 485, 68, 748, 45)
-	fmt.Println(canIDrink(18))
+	names := []string{"GO", "Python"}
+	names = append(names, "JavaScript")
+	fmt.Println(names)
 }

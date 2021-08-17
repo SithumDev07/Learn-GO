@@ -103,3 +103,14 @@ Creating Varibale Exclusively for if condition
 	}
 	return false
 
+### Arrays
+
+    names := [5]string{"Sithum", "Dashantha"}
+
+### Slices
+
+Arrays in go without the length, append will return a new value rather than modifying the array
+
+    names := []string{"GO", "Python"}
+	names = append(names, "JavaScript")
+	fmt.Println(names)
