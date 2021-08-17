@@ -72,3 +72,34 @@
         }
         return 1
     }
+
+### Conditions
+
+    func canIDrink(age int) bool {
+        if age < 18 {
+            return false
+        }
+        return true
+    }
+
+### Variable expressions
+
+Creating Varibale Exclusively for if condition
+
+    if sriLankanAge := age + 2; sriLankanAge < 18 {
+		return false
+	}
+	return true
+
+### Switch Statements
+
+    switch sriLankanAge := age + 2; sriLankanAge {
+	case 10:
+		return false
+	case 18:
+		return true
+	case 50:
+		return false
+	}
+	return false
+

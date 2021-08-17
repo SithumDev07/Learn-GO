@@ -34,6 +34,18 @@ func superAdd(numbers ...int) int {
 	return total
 }
 
+func canIDrink(age int) bool {
+	switch sriLankanAge := age + 2; sriLankanAge {
+	case 10:
+		return false
+	case 18:
+		return true
+	case 50:
+		return false
+	}
+	return false
+}
+
 func main() {
 	// fmt.Println(multiply(45, 10))
 	// something.SayHello()
@@ -45,6 +57,6 @@ func main() {
 	// length, upper := lenAndUpper("Sithum")
 	// fmt.Println(length, upper)
 
-	result := superAdd(45, 885, 125, 485, 68, 748, 45)
-	fmt.Println(result)
+	// result := superAdd(45, 885, 125, 485, 68, 748, 45)
+	fmt.Println(canIDrink(18))
 }
