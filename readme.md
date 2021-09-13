@@ -1,6 +1,7 @@
 # GoLang
 
 ### const and var
+
     var name string = "golang"
     shorthand -> name := "golang"
 
@@ -10,37 +11,40 @@
     then have to use as -> var name string = "golang"
 
 ### Functions
+
     func multiply(a int, b int) int {
         return a * b
     }
 
     Should say type of arguments and return type
 
-    If aruguments are same typed -> 
+    If aruguments are same typed ->
         func multiply(a, b int) int {
             return a * b
         }
-    
+
     in go, we can return many things ->
     func lenAndUpper(name string) (int, string) {
         return len(name), strings.ToUpper(name)
     }
 
-    when we calling the function -> 
+    when we calling the function ->
     totalLength, upperName := lenAndUpper("golang") -> this will return and assign in order
 
     Also we can ignore variables (Compiler look into them and ignore them)
     totalLength, _ := lenAndUpper("golang") -> uppercase (ignore)
 
 #### we can pass many values in to functions
+
     func repeatMe(words ...string) {
         fmt.Println(words)
-    } 
+    }
 
     repeatMe("Powered", "Golang", "Learning", "Hustling") -> will return as a literal array
 
 #### naked return
-    we don't have to return value explicitly, 
+
+    we don't have to return value explicitly,
     func lenAndUpper(name string) (length int, uppercase string) {
         length = len(name)
         uppercase = strings.ToUpper(name)
@@ -57,6 +61,7 @@
     }
 
 ## Loops
+
     only have for loop in GO
     func superAdd(numbers ...int) int {
         for index, number := range numbers { -> index will give the index and number will give the value
@@ -66,6 +71,7 @@
     }
 
 ##### Other way doing
+
     func superAdd(numbers ...int) int {
         for i := 0; i < len(numbers); i++ {
             fmt.Println(numbers[i])
@@ -87,21 +93,21 @@
 Creating Varibale Exclusively for if condition
 
     if sriLankanAge := age + 2; sriLankanAge < 18 {
-		return false
-	}
-	return true
+    	return false
+    }
+    return true
 
 ### Switch Statements
 
     switch sriLankanAge := age + 2; sriLankanAge {
-	case 10:
-		return false
-	case 18:
-		return true
-	case 50:
-		return false
-	}
-	return false
+    case 10:
+    	return false
+    case 18:
+    	return true
+    case 50:
+    	return false
+    }
+    return false
 
 ### Arrays
 
@@ -112,20 +118,20 @@ Creating Varibale Exclusively for if condition
 Arrays in go without the length, append will return a new value rather than modifying the array
 
     names := []string{"GO", "Python"}
-	names = append(names, "JavaScript")
-	fmt.Println(names)
+    names = append(names, "JavaScript")
+    fmt.Println(names)
 
 ### Map Data Structures
 
                 //Key  	//Value
-	Languages := map[string]string{"name": "GoLang", "age": "6"}
-	fmt.Println(Languages)
+    Languages := map[string]string{"name": "GoLang", "age": "6"}
+    fmt.Println(Languages)
 
 Iterating the array
 
     for key, value := range Languages {
-		fmt.Println(key, value)
-	}
+    	fmt.Println(key, value)
+    }
 
 ### Structs
 
@@ -145,11 +151,12 @@ Iterating the array
 Another Way
 
     Sithum := person{name: "Sithum", age: 21, favFood: favFood}
-	fmt.Println(Sithum)
+    fmt.Println(Sithum)
 
 ##### Go doesn't have classes and objects or constructors (We have to define ourselves)
 
 ### Structs Exporting
+
 if Types are lowercase, it means they are private
 
 private->
@@ -187,11 +194,11 @@ public->
 then->
 
     import (
-	    "github.com/SithumDev07/LearnGO/accounts"
+        "github.com/SithumDev07/LearnGO/accounts"
     )
 
     account := accounts.NewAccount("Sithum")
-	fmt.Println(account)
+    fmt.Println(account)
 
 ### Methods (in GO Recievers)
 
@@ -220,9 +227,9 @@ When we actually change the value we use have to exactly point to the value rath
 Handling
 
     err := account.Withdraw(90000)
-	if err != nil {
-		log.Fatalln(err)
-	}
+    if err != nil {
+    	log.Fatalln(err)
+    }
 
 Premake erros
 
@@ -231,20 +238,53 @@ Premake erros
 in reciever
 
     if a.balance < amount {
-		return errNoMoney
-	}
+    	return errNoMoney
+    }
 
 ### Go Internal Methods
 
-    fmt.Println(account) will look like &{Sithum 79500} 
+    fmt.Println(account) will look like &{Sithum 79500}
 
 there is reciever call String() and we can use it to change the default behavior
 
     func (a Account) String() string {
-	    return fmt.Sprint(a.Owner(), "'s account.\nHas: ", a.Balance())
+        return fmt.Sprint(a.Owner(), "'s account.\nHas: ", a.Balance())
     }
 
 This will give an output like,
 
     Sithum's account.
     Has: 79500
+
+### Dictionary
+
+Dictionary is type of map
+
+    package mydict
+
+    type Dictionary map[string]string
+
+Search in dictionary
+
+    var errorNotFound = errors.New("Not Found")
+
+    func (d Dictionary) Search(word string) (string, error) {
+        value, exists := d[word]
+
+        if exists {
+            return value, nil
+        }
+
+        return "", errorNotFound
+    }
+
+When making a dictionary and search for a word
+
+    dictionary := mydict.Dictionary{"first" : "GO Lang"}
+    definition, error := mydict.Search("Python")
+
+    if error != nil {
+        fmt.Println(error)
+    } else {
+        fmt.Println(definition)
+    }

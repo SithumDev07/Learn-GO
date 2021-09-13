@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/SithumDev07/LearnGO/accounts"
+	// "github.com/SithumDev07/LearnGO/accounts"
+	"github.com/SithumDev07/LearnGO/mydict"
 )
 
 // import (
@@ -55,11 +56,11 @@ type person struct {
 }
 
 func main() {
-	account := accounts.NewAccount("Sithum")
-	account.Deposit(79500)
-	// err := account.Withdraw(90000)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	fmt.Println(account)
+	dictionary := mydict.Dictionary{"first": "First Word"}
+	definition, error := dictionary.Search("first")
+	if error != nil {
+		fmt.Println(error)
+	} else {
+		fmt.Println(definition)
+	}
 }
