@@ -336,7 +336,7 @@ Update in dictionary
         return nil
     }
 
-When Updating dictionary
+When Updating a word dictionary
 
     dictionary := mydict.Dictionary{}
 
@@ -349,3 +349,44 @@ When Updating dictionary
     if err != nil {
         fmt.Println(err)
     }
+
+Deleting a word in dictionary
+
+    var errorCantDelete = errors.New("Cant delete non exisiting word")
+
+    func (d Dictionary) Delete(word string) error {
+
+        _, err := d.Search(word)
+
+        switch err {
+            case nil:
+                delete(d, word)
+            case errorNotFound:
+                return errorCantDelete
+        }
+
+        return nil
+
+    }
+
+When deleting a word from dictionary
+
+    dictionary := mydict.Dictionary{}
+
+    baseword := "Hello"
+
+    dictionary.Add(baseword, "First")
+
+    err := dictionary.Delete(baseword)
+
+    if err != nil {
+        fmt.Println(err)
+    }
+
+### creating variables as group
+
+    var (
+        errorNotFound = errors.New("Word not found")
+        errorCantUpdate = errors.New("Cant update non existing word")
+        errorCantDelete = errors.New("Cant delete non existing word")
+    )

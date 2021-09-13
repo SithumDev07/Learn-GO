@@ -61,10 +61,10 @@ func main() {
 	basWord := "hello"
 
 	dictionary.Add(basWord, "First")
-	err := dictionary.Update(basWord, "Second")
+	err := dictionary.Delete(basWord)
 	if err != nil {
 		fmt.Println(err)
 	}
-	word, _ := dictionary.Search(basWord)
-	fmt.Println(word)
+	// word, _ := dictionary.Search(basWord)
+	fmt.Println(dictionary)
 }
