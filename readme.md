@@ -289,7 +289,7 @@ When making a dictionary and search for a word
         fmt.Println(definition)
     }
 
-Search in Dictionary
+Add in Dictionary
 
     var errorWordExists = errors.New("Word is already exists")
 
@@ -304,4 +304,48 @@ Search in Dictionary
                 return errorWordExists
         }
         return nil
+    }
+
+When adding word into dictionary
+
+    dictionary := mydict.Dictionary{}
+
+    baseword := "Hello"
+
+    err := dictionary.Add(baseword, "First")
+
+    if err != nil {
+        fmt.Println(err)
+    }
+
+Update in dictionary
+
+    var errorCantUpdate = errors.New("Cant Update non existing word)
+
+    func (d Dictionary) Update (word, definition string) error {
+
+        _, err := d.Search(word)
+
+        switch err {
+            case nil:
+                d[word] = definition
+            case errorNotFound:
+                return errorCantUpdate
+        }
+
+        return nil
+    }
+
+When Updating dictionary
+
+    dictionary := mydict.Dictionary{}
+
+    baseword := "Hello"
+
+    dictionary.Add(baseword, "First")
+
+    err := dictionary.Update(baseword, "Second")
+
+    if err != nil {
+        fmt.Println(err)
     }
