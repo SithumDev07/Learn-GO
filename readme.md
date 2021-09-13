@@ -288,3 +288,20 @@ When making a dictionary and search for a word
     } else {
         fmt.Println(definition)
     }
+
+Search in Dictionary
+
+    var errorWordExists = errors.New("Word is already exists")
+
+    func (d Dictionary) Add(word, def string) error {
+
+        _, error := d.Search(word)
+
+        switch error {
+            case errorNotFound:
+                d[word] = def
+            case nil:
+                return errorWordExists
+        }
+        return nil
+    }

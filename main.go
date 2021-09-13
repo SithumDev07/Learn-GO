@@ -57,10 +57,21 @@ type person struct {
 
 func main() {
 	dictionary := mydict.Dictionary{"first": "First Word"}
-	definition, error := dictionary.Search("first")
+
+	word := "hello"
+	defintion := "Greeting"
+
+	error := dictionary.Add(word, defintion)
+
 	if error != nil {
 		fmt.Println(error)
-	} else {
-		fmt.Println(definition)
-	}
+	} 
+	
+	def, error := dictionary.Search(word)
+	fmt.Println(def)
+	error2 := dictionary.Add(word, defintion)
+	
+	if error2 != nil {
+		fmt.Println(error2)
+	} 
 }
