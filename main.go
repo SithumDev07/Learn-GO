@@ -1,11 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"strings"
-
 	// "github.com/SithumDev07/LearnGO/accounts"
-	"github.com/SithumDev07/LearnGO/mydict"
 )
 
 // import (
@@ -56,15 +56,28 @@ type person struct {
 }
 
 func main() {
-	dictionary := mydict.Dictionary{}
-
-	basWord := "hello"
-
-	dictionary.Add(basWord, "First")
-	err := dictionary.Delete(basWord)
-	if err != nil {
-		fmt.Println(err)
+	urls:= []string{
+		"https://www.google.com/",
+		"https://www.airbnb.com/",
+		"https://www.amazon.com/",
+		"https://www.reddit.com/",
+		"https://soundcloud.com/",
+		"https://www.facebook.com/",
+		"https://www.instagram.com/",
 	}
-	// word, _ := dictionary.Search(basWord)
-	fmt.Println(dictionary)
+
+	for _, url := range urls {
+		hitURL(url)
+	}
+}
+
+var requestFail = errors.New("Request Failed")
+
+func hitURL(url string) error{
+	fmt.Println("Checking", url)
+	response, err := http.Get(url)
+	if err == nil || response.StatusCode >= 400{
+		return requestFail
+	}
+	return nil
 }

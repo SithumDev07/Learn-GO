@@ -390,3 +390,20 @@ When deleting a word from dictionary
         errorCantUpdate = errors.New("Cant update non existing word")
         errorCantDelete = errors.New("Cant delete non existing word")
     )
+
+### hitURL()
+
+using http standard library from go
+
+    var requestFail = erros.New("Request Failed")
+
+    func hitURL(url string) error {
+
+        res, err := http.Get(url)
+
+        if err == nil || res,StatusCode >= 400 {
+            return requestFail
+        }
+
+        return nil
+    }
