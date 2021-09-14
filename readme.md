@@ -407,3 +407,35 @@ using http standard library from go
 
         return nil
     }
+
+### Maps
+
+    var results map[string]string
+
+    results["First"] = "Hello"
+
+when we initialize a map and try to add the complier won't giving errors but at runtime there will be errors, because map will nil, can't add values into nil
+
+So, we need to initialize map either,
+
+    var results = map[string]string{}
+
+or, using make function
+
+    var results = make(map[string]string)
+
+### Go Routines
+
+    func Count(person string) {
+        for i:=0; i<10; i++ {
+            fmt.Println(person, "is looking good, i)
+            time.Sleep(time.Second)
+        }
+    }
+
+when calling, do concurrently, next to other
+
+    go Count("Sithum")
+    Count("Go")
+
+note: Go routine is alive only main function is alive

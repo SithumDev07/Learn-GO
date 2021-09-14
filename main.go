@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 	// "github.com/SithumDev07/LearnGO/accounts"
 )
 
@@ -56,18 +57,41 @@ type person struct {
 }
 
 func main() {
-	urls:= []string{
-		"https://www.google.com/",
-		"https://www.airbnb.com/",
-		"https://www.amazon.com/",
-		"https://www.reddit.com/",
-		"https://soundcloud.com/",
-		"https://www.facebook.com/",
-		"https://www.instagram.com/",
-	}
+	
+	// var results = make(map[string]string)
 
-	for _, url := range urls {
-		hitURL(url)
+	// urls:= []string{
+	// 	"https://www.google.com/",
+	// 	"https://www.airbnb.com/",
+	// 	"https://www.amazon.com/",
+	// 	"https://www.reddit.com/",
+	// 	"https://soundcloud.com/",
+	// 	"https://www.facebook.com/",
+	// 	"https://www.instagram.com/",
+	// }
+
+	// for _, url := range urls {
+	// 	result := "OK"
+	// 	err := hitURL(url)
+	// 	if err != nil {
+	// 		result = "FAILED"
+	// 	}
+	// 	results[url] = result
+	// }
+
+	// for url, result := range results {
+	// 	fmt.Println(url, " ", result)
+	// }
+
+	go Count("Sithum")
+	Count("Dashantha")
+
+}
+
+func Count(person string) {
+	for i:=0; i<10; i++ {
+		fmt.Println(person, " is looking good", i)
+		time.Sleep(time.Second)
 	}
 }
 
@@ -76,7 +100,8 @@ var requestFail = errors.New("Request Failed")
 func hitURL(url string) error{
 	fmt.Println("Checking", url)
 	response, err := http.Get(url)
-	if err == nil || response.StatusCode >= 400{
+	if err != nil || response.StatusCode >= 400{
+		fmt.Println(err, response.StatusCode)
 		return requestFail
 	}
 	return nil
