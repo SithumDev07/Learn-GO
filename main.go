@@ -1,8 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"strings"
 
+	"github.com/SithumDev07/LearnGO/scrapper"
 	"github.com/labstack/echo/v4"
 )
 
@@ -12,9 +14,13 @@ func handleHome (c echo.Context) error {
 	return c.File("Home.html")
 }
 
+const fileName string = "jobs.csv"
+
 func handleScrape(c echo.Context) error {
-	fmt.Println(c.FormValue("term"))
-	return nil
+	defer os.Remove(fileName)
+	term := strings.ToLower(scrapper.CleanString(c.FormValue("term")))
+	scrapper.Scrape(term)
+	return c.Attachment(fileName, "jobs.csv")
 }
 
 func main() {
