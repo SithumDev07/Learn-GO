@@ -2,105 +2,88 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 	"strings"
-	// "github.com/SithumDev07/LearnGO/accounts"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
-// import (
-// 	"fmt"
-
-// 	"github.com/SithumDev07/LearnGO/something"
-// )
-
-func lenAndUpper(name string) (length int, uppercase string) {
-	defer fmt.Println("I' Done")
-	length = len(name)
-	uppercase = strings.ToUpper(name)
-	return
+type extractedJob struct {
+	id string
+	location string
+	title string
+	salary string
+	description string
 }
 
-func multiply(a int, b int) int {
-	return a * b
-}
-
-func repeatMe(words ...string) {
-	fmt.Println(words)
-}
-
-func superAdd(numbers ...int) int {
-	total := 0
-	for _, number := range numbers {
-		total += number
-	}
-	return total
-}
-
-func canIDrink(age int) bool {
-	switch sriLankanAge := age + 2; sriLankanAge {
-	case 10:
-		return false
-	case 18:
-		return true
-	case 50:
-		return false
-	}
-	return false
-}
-
-type person struct {
-	name    string
-	age     int
-	favFood []string
-}
-
-
-type result struct {
-	url string
-	status string
-}
+var baseURL string = "https://kr.indeed.com/jobs?q=python&limit=50"
 
 func main() {
+	totalPages := getPages()
+	for i := 0; i < totalPages; i++ {
+		getPage(i)
+	}
+}
+
+func getPage (page int) {
+	pageURL := baseURL + "&start=" + strconv.Itoa(page*50)
 	
-	results := make(map[string]string)
-	c := make(chan result)
+	res, err := http.Get(pageURL)
+	checkError(err)
+	checkCode(res)
 
-	urls:= []string{
-		"https://www.google.com/",
-		"https://www.airbnb.com/",
-		"https://www.amazon.com/",
-		"https://www.reddit.com/",
-		"https://soundcloud.com/",
-		"https://www.facebook.com/",
-		"https://www.instagram.com/",
+	defer res.Body.Close()
+	
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	checkError(err)
+
+	searchCards := doc.Find(".tapItem")
+	searchCards.Each(func(i int, card *goquery.Selection) {
+		extractJob(card)
+	})
+}
+
+func extractJob(card *goquery.Selection) {
+	id, _ := card.Attr("data-jk")
+	title := cleanString(card.Find(".jobTitle>span").Text())
+	location := cleanString(card.Find(".companyLocation").Text())
+	fmt.Println(id, title, location)
+}
+
+func getPages() int {
+
+	pages := 0
+
+	res, err := http.Get(baseURL)
+	checkError(err)
+	checkCode(res)
+
+	defer res.Body.Close()
+	
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	checkError(err)
+
+	doc.Find(".pagination").Each(func(i int, s *goquery.Selection) {
+		pages = s.Find("a").Length()
+	})
+	
+	return pages
+}
+
+func checkError(err error) {
+	if err != nil {
+		log.Fatalln(err)
+	}	
+} 
+
+func checkCode(res *http.Response) {
+	if res.StatusCode != 200 {
+		log.Fatalln("Request failed with status code: ", res.StatusCode)
 	}
+}
 
-	for _, url := range urls {
-		go hitURL(url, c)
-	}
-
-	for i:=0; i < len(urls); i++{
-		resultss := <-c
-		results[resultss.url] = resultss.status
-	}
-
-	for url, status := range results {
-		fmt.Println(url, status)
-	}
-
-
- }
-
-
-func hitURL(url string, c chan<- result) {
-	res, err := http.Get(url)
-	status := "OK"
-	if err != nil || res.StatusCode >= 400 {
-		status = "FAILED"
-	}
-
-	c <- result{
-		url: url,
-		status: status,
-	}
+func cleanString (str string) string {
+	return strings.Join(strings.Fields(strings.TrimSpace(str)), " ")
 }
