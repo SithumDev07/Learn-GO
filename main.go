@@ -25,10 +25,15 @@ var baseURL string = "https://kr.indeed.com/jobs?q=python&limit=50"
 func main() {
 
 	var jobs []extractedJob
+	c := make(chan []extractedJob)
 
 	totalPages := getPages()
 	for i := 0; i < totalPages; i++ {
-		extractedJobs := getPage(i)
+		go getPage(i, c)
+	}
+
+	for i :=0; i < totalPages; i++ {
+		extractedJobs := <-c
 		jobs = append(jobs, extractedJobs...)
 	}
 
@@ -36,30 +41,11 @@ func main() {
 	fmt.Println("Done", len(jobs))
 }
 
-func writeJobs(jobs []extractedJob) {
-	file, err := os.Create("jobs.csv")
-	checkError(err)
-
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-
-	headers := []string{
-		"ID", "title", "location", "salary", "description",
-	}
-
-	writeError := writer.Write(headers)
-	checkError(writeError)
-
-	for _, job := range jobs {
-		jobSlice := []string{"https://kr.indeed.com/viewjob?jk=" + job.id, job.title, job.location, job.salary, job.description}
-		jobWriteError := writer.Write(jobSlice)
-		checkError(jobWriteError)
-	}
-}
-
-func getPage (page int) []extractedJob{
+func getPage (page int, mainChannel chan<- []extractedJob) {
 
 	var jobs []extractedJob
+
+	c:= make(chan extractedJob)
 
 	pageURL := baseURL + "&start=" + strconv.Itoa(page*50)
 	fmt.Println("requesting", pageURL)
@@ -75,20 +61,24 @@ func getPage (page int) []extractedJob{
 
 	searchCards := doc.Find(".tapItem")
 	searchCards.Each(func(i int, card *goquery.Selection) {
- 		job := extractJob(card)
-		jobs = append(jobs, job)
+ 		go extractJob(card, c)
 	})
 
-	return jobs
+	for i := 0; i < searchCards.Length(); i++ {
+		job := <-c
+		jobs = append(jobs, job)
+	}
+
+	mainChannel <- jobs
 }
 
-func extractJob(card *goquery.Selection) extractedJob{
+func extractJob(card *goquery.Selection, c chan<- extractedJob) {
 	id, _ := card.Attr("data-jk")
 	title := cleanString(card.Find(".jobTitle>span").Text())
 	location := cleanString(card.Find(".companyLocation").Text())
 	salary := cleanString(card.Find(".salary-snippet").Text())
 	description := cleanString(card.Find(".job-snippet").Text())
-	return extractedJob{
+	c <- extractedJob{
 		id: id,
 		title: title,
 		location: location,
@@ -115,6 +105,27 @@ func getPages() int {
 	})
 	
 	return pages
+}
+
+func writeJobs(jobs []extractedJob) {
+	file, err := os.Create("jobs.csv")
+	checkError(err)
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	headers := []string{
+		"ID", "title", "location", "salary", "description",
+	}
+
+	writeError := writer.Write(headers)
+	checkError(writeError)
+
+	for _, job := range jobs {
+		jobSlice := []string{"https://kr.indeed.com/viewjob?jk=" + job.id, job.title, job.location, job.salary, job.description}
+		jobWriteError := writer.Write(jobSlice)
+		checkError(jobWriteError)
+	}
 }
 
 func checkError(err error) {
