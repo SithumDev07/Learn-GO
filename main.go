@@ -21,15 +21,24 @@ type extractedJob struct {
 var baseURL string = "https://kr.indeed.com/jobs?q=python&limit=50"
 
 func main() {
+
+	var jobs []extractedJob
+
 	totalPages := getPages()
 	for i := 0; i < totalPages; i++ {
-		getPage(i)
+		extractedJobs := getPage(i)
+		jobs = append(jobs, extractedJobs...)
 	}
+
+	fmt.Println(jobs)
 }
 
-func getPage (page int) {
+func getPage (page int) []extractedJob{
+
+	var jobs []extractedJob
+
 	pageURL := baseURL + "&start=" + strconv.Itoa(page*50)
-	
+
 	res, err := http.Get(pageURL)
 	checkError(err)
 	checkCode(res)
@@ -41,15 +50,26 @@ func getPage (page int) {
 
 	searchCards := doc.Find(".tapItem")
 	searchCards.Each(func(i int, card *goquery.Selection) {
-		extractJob(card)
+ 		job := extractJob(card)
+		jobs = append(jobs, job)
 	})
+
+	return jobs
 }
 
-func extractJob(card *goquery.Selection) {
+func extractJob(card *goquery.Selection) extractedJob{
 	id, _ := card.Attr("data-jk")
 	title := cleanString(card.Find(".jobTitle>span").Text())
 	location := cleanString(card.Find(".companyLocation").Text())
-	fmt.Println(id, title, location)
+	salary := cleanString(card.Find(".salary-snippet").Text())
+	description := cleanString(card.Find(".job-snippet").Text())
+	return extractedJob{
+		id: id,
+		title: title,
+		location: location,
+		salary: salary,
+		description: description,
+	}
 }
 
 func getPages() int {
