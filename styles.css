@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.main h1 {
+  font-size: 3rem;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 20px;
+  letter-spacing: 1.5rem;
+  line-height: 1.5;
+}
+
+.main h3 {
+  font-size: 1.1rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 20px;
+}
+
+form input {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+  padding: 15px 20px;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 1.6rem;
+}
