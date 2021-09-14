@@ -439,3 +439,25 @@ when calling, do concurrently, next to other
     Count("Go")
 
 note: Go routine is alive only main function is alive
+
+### Channels
+
+when usng go routines they only awake if the main function awakes, so we have to use channels in order to communicate with main function from go routuines
+
+    func isGood(person string, c chan bool) {
+        time.Sleep(time.Second * 3)
+        fmt.Println(person)
+        c <- true
+    }
+
+when calling from main
+
+    c := make(chan bool)
+    people := [2]string{"Sithum", "GoLang"}
+
+    for _, person := range people {
+        go IsGood(person, c)
+    }
+
+    fmt.Println(<-c)
+    fmt.Println(<-c)

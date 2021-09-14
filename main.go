@@ -83,16 +83,22 @@ func main() {
 	// 	fmt.Println(url, " ", result)
 	// }
 
-	go Count("Sithum")
-	Count("Dashantha")
+	c := make(chan bool)
+	people := [2]string{"Sithum", "Basnayake"}
+
+	for _, person := range people {
+		go Count(person, c)
+	}
+
+	fmt.Println(<-c)
+	fmt.Println(<-c)
 
 }
 
-func Count(person string) {
-	for i:=0; i<10; i++ {
-		fmt.Println(person, " is looking good", i)
-		time.Sleep(time.Second)
-	}
+func Count(person string, c chan bool) {
+	time.Sleep(time.Second * 3)
+	fmt.Println(person)
+	c <- true
 }
 
 var requestFail = errors.New("Request Failed")
