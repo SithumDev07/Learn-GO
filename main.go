@@ -1,11 +1,9 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 	// "github.com/SithumDev07/LearnGO/accounts"
 )
 
@@ -56,59 +54,53 @@ type person struct {
 	favFood []string
 }
 
+
+type result struct {
+	url string
+	status string
+}
+
 func main() {
 	
-	// var results = make(map[string]string)
+	results := make(map[string]string)
+	c := make(chan result)
 
-	// urls:= []string{
-	// 	"https://www.google.com/",
-	// 	"https://www.airbnb.com/",
-	// 	"https://www.amazon.com/",
-	// 	"https://www.reddit.com/",
-	// 	"https://soundcloud.com/",
-	// 	"https://www.facebook.com/",
-	// 	"https://www.instagram.com/",
-	// }
-
-	// for _, url := range urls {
-	// 	result := "OK"
-	// 	err := hitURL(url)
-	// 	if err != nil {
-	// 		result = "FAILED"
-	// 	}
-	// 	results[url] = result
-	// }
-
-	// for url, result := range results {
-	// 	fmt.Println(url, " ", result)
-	// }
-
-	c := make(chan bool)
-	people := [2]string{"Sithum", "Basnayake"}
-
-	for _, person := range people {
-		go Count(person, c)
+	urls:= []string{
+		"https://www.google.com/",
+		"https://www.airbnb.com/",
+		"https://www.amazon.com/",
+		"https://www.reddit.com/",
+		"https://soundcloud.com/",
+		"https://www.facebook.com/",
+		"https://www.instagram.com/",
 	}
 
-	fmt.Println(<-c)
-	fmt.Println(<-c)
-
-}
-
-func Count(person string, c chan bool) {
-	time.Sleep(time.Second * 3)
-	fmt.Println(person)
-	c <- true
-}
-
-var requestFail = errors.New("Request Failed")
-
-func hitURL(url string) error{
-	fmt.Println("Checking", url)
-	response, err := http.Get(url)
-	if err != nil || response.StatusCode >= 400{
-		fmt.Println(err, response.StatusCode)
-		return requestFail
+	for _, url := range urls {
+		go hitURL(url, c)
 	}
-	return nil
+
+	for i:=0; i < len(urls); i++{
+		resultss := <-c
+		results[resultss.url] = resultss.status
+	}
+
+	for url, status := range results {
+		fmt.Println(url, status)
+	}
+
+
+ }
+
+
+func hitURL(url string, c chan<- result) {
+	res, err := http.Get(url)
+	status := "OK"
+	if err != nil || res.StatusCode >= 400 {
+		status = "FAILED"
+	}
+
+	c <- result{
+		url: url,
+		status: status,
+	}
 }

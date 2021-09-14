@@ -461,3 +461,50 @@ when calling from main
 
     fmt.Println(<-c)
     fmt.Println(<-c)
+
+recieving is a blocking operation means that main funtion waits until recieves
+
+### Fast URL Checker
+
+    type result struct {
+        url string
+        status string
+    }
+
+    func hitURL(url string, c chan<- result) {
+        res, err := http.Get(url)
+        status := "OK"
+        if err != nil || res.StatusCode >= 400 {
+            status = "FAILED"
+        }
+
+        c <- result {
+            url: url,
+            status: status
+        }
+    }
+
+When we action
+
+    results := make(map[string]string)
+    c := make(chan result)
+
+    urls := []string {
+        "https://www.google.com/",
+    	"https://www.airbnb.com/",
+    	"https://www.amazon.com/",
+    	"https://www.reddit.com/",
+    }
+
+    for _, url := range urls {
+        go hitURL(url, c)
+    }
+
+    for i:=0; i < len(urls); i++ {
+        answer := <-c
+        results[answer.url] = answer.status
+    }
+
+    for url, status := range results {
+        fmt.Println(url, status)
+    }
